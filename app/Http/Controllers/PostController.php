@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
@@ -27,6 +27,15 @@ class PostController extends Controller
     {
         return view('posts.show')->with(['post' => $post]);
         //'post'はbladeファイルで使う変数。中身は$postはid=1のPostインスタンス。
+    }
+    
+    public function store(Post $post, PostRequest $request){
+        // リクエストパラメータの取得
+        $input = $request['post'];
+        // Postインスタンスのプロパティの値を保存する処理
+        $post->fill($input)->save();
+        // リダイレクト
+        return redirect('/posts/'.$post->id);
     }
 }
 ?>
